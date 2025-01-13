@@ -60,8 +60,7 @@ router.get("/post/:id", async (req, res) => {
   }
 });
 
-router.post('/search', async (req, res) => {
-
+router.post("/search", async (req, res) => {
   try {
     const locals = {
       title: "Nodejs blog",
@@ -69,25 +68,26 @@ router.post('/search', async (req, res) => {
     };
 
     // let slug = req.params.id;
-    let searchTerm = req.body.searchTerm
-    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9]/g,"")
+    let searchTerm = req.body.searchTerm;
+    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
     // let page = req.query.page || 1;
     // const data = await Post.findById({_id: slug});
     const data = await Post.find({
       $or: [
-        {title: {$regex: new RegExp(searchNoSpecialChar, 'i')}},
-        {body: {$regex: new RegExp(searchNoSpecialChar, 'i')}}
-      ]
-    })
+        { title: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+        { body: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+      ],
+    });
 
-    res.render('search',{data,locals})
+    res.render("search", {
+      data,
+      locals,
+      currentRoute: `/`,
+    });
   } catch (error) {
     console.log("error", error);
   }
-})
-
-
-
+});
 
 function insertPostData() {
   Post.insertMany([
@@ -139,6 +139,11 @@ function insertPostData() {
 router.get("/about", (req, res) => {
   res.render("about", {
     currentRoute: "/about",
+  });
+});
+router.get("/contact", (req, res) => {
+  res.render("contact", {
+    currentRoute: "/contact",
   });
 });
 
